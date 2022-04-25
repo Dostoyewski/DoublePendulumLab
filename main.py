@@ -6,9 +6,11 @@ import pandas as pd
 class ARUCODetector(object):
     def __init__(self, filename):
         self.cap = cv.VideoCapture(filename)
-        self.res_df = pd.DataFrame(columns=['31x', '31y', '32x', '32y', '33x', '33y'])
+        self.res_df = pd.DataFrame(columns=['31x', '31y', '32x', '32y', '33x', '33y', 'timestamp'])
+        self.fps = self.cap.get(cv.CAP_PROP_FPS)
 
     def run(self):
+        n = 0
         while True:
             success, image = self.cap.read()
             if image is None:
@@ -29,8 +31,10 @@ class ARUCODetector(object):
                         coords = list(np.mean(markerCorners[0], axis=1)[0].astype('int'))
                         image = cv.circle(image, coords, 20, (255, 0, 0), -1)
                         out_d[str(idd[0]) + 'x'], out_d[str(idd[0]) + 'y'] = coords[0], coords[1]
+                    out_d['timestamp'] = n / self.fps
                     self.res_df = self.res_df.append(out_d, ignore_index=True)
                 cv.imshow("Detection result", image)
+                n += 1
             else:
                 continue
         self.res_df.to_excel('./out.xlsx')
