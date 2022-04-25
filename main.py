@@ -12,6 +12,7 @@ class ARUCODetector(object):
         while True:
             success, image = self.cap.read()
             if image is None:
+                cv.destroyAllWindows()
                 break
             key = cv.waitKey(1) & 0xFF
             if (key == 27) or (key == ord('q')):
@@ -29,7 +30,7 @@ class ARUCODetector(object):
                         image = cv.circle(image, coords, 20, (255, 0, 0), -1)
                         out_d[str(idd[0]) + 'x'], out_d[str(idd[0]) + 'y'] = coords[0], coords[1]
                     self.res_df = self.res_df.append(out_d, ignore_index=True)
-                cv.imshow("original", image)
+                cv.imshow("Detection result", image)
             else:
                 continue
         self.res_df.to_excel('./out.xlsx')
