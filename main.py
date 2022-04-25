@@ -4,6 +4,7 @@ import pandas as pd
 
 if __name__ == '__main__':
     cap = cv.VideoCapture('./test.mp4')
+    res_df = pd.DataFrame(columns=['31x', '31y', '32x', '32y', '33x', '33y'])
     while True:
         success, image = cap.read()
         if image is None:
@@ -18,8 +19,13 @@ if __name__ == '__main__':
                                                                                   dictionary,
                                                                                   parameters=parameters)
             if markerIds is not None:
-                coords = list(np.mean(markerCorners[0], axis=1)[0].astype('int'))
-                image = cv.circle(image, coords, 20, (255, 0, 0), -1)
+                out_d = {}
+                for idd in markerIds:
+                    coords = list(np.mean(markerCorners[0], axis=1)[0].astype('int'))
+                    image = cv.circle(image, coords, 20, (255, 0, 0), -1)
+                    out_d[str(idd[0]) + 'x'], out_d[str(idd[0]) + 'y'] = coords[0], coords[1]
+                res_df = res_df.append(out_d, ignore_index=True)
             cv.imshow("original", image)
         else:
             continue
+    res_df.to_excel('./out.xlsx')
