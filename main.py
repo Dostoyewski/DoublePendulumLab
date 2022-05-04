@@ -27,8 +27,8 @@ class ARUCODetector(object):
                                                                                       parameters=parameters)
                 if markerIds is not None:
                     out_d = {}
-                    for idd in markerIds:
-                        coords = list(np.mean(markerCorners[0], axis=1)[0].astype('int'))
+                    for i, idd in enumerate(markerIds):
+                        coords = list(np.mean(markerCorners[i], axis=1)[0].astype('int'))
                         image = cv.circle(image, coords, 20, (255, 0, 0), -1)
                         out_d[str(idd[0]) + 'x'], out_d[str(idd[0]) + 'y'] = coords[0], coords[1]
                     out_d['timestamp'] = n / self.fps
@@ -41,5 +41,5 @@ class ARUCODetector(object):
 
 
 if __name__ == '__main__':
-    det = ARUCODetector('./test.mp4')
+    det = ARUCODetector('./IMG_3272.MOV')
     det.run()
