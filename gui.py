@@ -29,7 +29,7 @@ class App(QMainWindow):
         # Time axis
         self.left = 10
         self.top = 50
-        self.title = 'Lab4 0.8'
+        self.title = 'Lab4 v1.2.0'
         # bar with buttons and checkbox
         self.filepath = ''
         self.btnStart = QPushButton('Start', self)
